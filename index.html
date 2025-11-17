@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Trailer Shop Database - Project Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .search-box {
+            padding: 20px 40px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        nav {
+            background: #2c3e50;
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        nav li {
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        nav a {
+            display: block;
+            padding: 15px 20px;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            transition: background 0.3s;
+            border-right: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        nav a:hover, nav a.active {
+            background: #34495e;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        section {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+        
+        section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h2 {
+            color: #2c3e50;
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            font-size: 2em;
+        }
+        
+        h3 {
+            color: #34495e;
+            margin: 25px 0 15px 0;
+            font-size: 1.5em;
+        }
+        
+        h4 {
+            color: #546e7a;
+            margin: 20px 0 10px 0;
+            font-size: 1.2em;
+        }
+        
+        .alert {
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+        
+        .alert-danger {
+            background: #fee;
+            border-color: #f44336;
+            color: #c62828;
+        }
+        
+        .alert-warning {
+            background: #fff3cd;
+            border-color: #ffc107;
+            color: #856404;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+        
+        .alert-info {
+            background: #d1ecf1;
+            border-color: #17a2b8;
+            color: #0c5460;
+        }
+        
+        code {
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #e83e8c;
+        }
+        
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+        
+        .badge-primary { background: #667eea; color: white; }
+        .badge-success { background: #28a745; color: white; }
+        .badge-danger { background: #f44336; color: white; }
+        .badge-warning { background: #ffc107; color: #333; }
+        
+        ul, ol {
+            margin: 15px 0 15px 30px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚛 The Trailer Shop Database</h1>
+            <p>Complete Implementation Guide & Reference</p>
+            <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.8;">Last Updated: November 16, 2025</p>
+        </header>
+        
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔍 Search documentation...">
+        </div>
+        
+        <nav>
+            <ul>
+                <li><a href="#overview" class="nav-link active">Overview</a></li>
+                <li><a href="#context" class="nav-link">Business Context</a></li>
+                <li><a href="#schema" class="nav-link">Database Schema</a></li>
+                <li><a href="#functions" class="nav-link">Functions</a></li>
+                <li><a href="#views" class="nav-link">Views</a></li>
+                <li><a href="#mistakes" class="nav-link">Avoid These Mistakes</a></li>
+                <li><a href="#integration" class="nav-link">Next.js Integration</a></li>
+                <li><a href="#nextsteps" class="nav-link">Next Steps</a></li>
+                <li><a href="#files" class="nav-link">Project Files</a></li>
+            </ul>
+        </nav>
+        
+        <div class="content" id="content">
+            <!-- OVERVIEW -->
+            <section id="overview" class="active">
+                <h2>Project Overview</h2>
+                
+                <div class="alert alert-success">
+                    <strong>✅ Database Status:</strong> Foundation Complete & Operational
+                </div>
+                
+                <div class="card">
+                    <h3>Current State (November 16, 2025)</h3>
+                    <ul>
+                        <li><strong>Platform:</strong> Supabase (PostgreSQL)</li>
+                        <li><strong>Tables Created:</strong> 22 tables (all core entities)</li>
+                        <li><strong>Functions:</strong> 8 functions (ID generation, lead conversion, settings)</li>
+                        <li><strong>Views:</strong> 7 views (totals, inventory, customer search, balances)</li>
+                        <li><strong>Triggers:</strong> 14 triggers (timestamps, inventory updates)</li>
+                        <li><strong>Status:</strong> Ready for Next.js integration</li>
+                    </ul>
+                </div>
+                
+                <h3>Critical Success Metric</h3>
+                <div class="alert alert-danger">
+                    <strong>⚠️ THE ONLY METRIC THAT MATTERS:</strong> Will Cody use it?<br><br>
+                    If the system is slower or harder than paper, this project fails. Every design decision must eliminate friction, not create it.
+                </div>
+                
+                <h3>The Starting Point</h3>
+                <p>This database replaces <strong>crumpled paper invoices</strong> with handwritten parts, quantities, and prices. The current "system" is:</p>
+                <ul>
+                    <li>Handwritten notes on notepad paper</li>
+                    <li>No consistent pricing methodology</li>
+                    <li>Incomplete customer records</li>
+                    <li>No service history tracking</li>
+                    <li>Manual entry into QuickBooks after the fact</li>
+                </ul>
+                
+                <h3>The Goal</h3>
+                <p><strong>Simple. Easy. Now.</strong></p>
+                <ul>
+                    <li>Digital invoice creation in &lt; 60 seconds (vs 5+ minutes handwritten)</li>
+                    <li>Customer lookup in &lt; 10 seconds (vs flipping through papers)</li>
+                    <li>Zero typing required for standard jobs (OCR + voice + barcode)</li>
+                    <li>Automatic calculations (no manual math)</li>
+                    <li>Instant access to customer/trailer history</li>
+                </ul>
+            </section>
+            <section id="files">
+                <h2>Project Files</h2>
+            
+                <div class="alert alert-info">
+                    <strong>🤖 AI Access:</strong> All files below are accessible to AI assistants via web_fetch.
+                </div>
+            
+                <h3>Database Schema</h3>
+                <table>
+                    <tr>
+                        <th>File</th>
+                        <th>Description</th>
+                        <th>AI-Readable URL</th>
+                    </tr>
+                    <tr>
+                        <td>schema.json</td>
+                        <td>Complete database schema</td>
+                        <td><a href="https://raw.githubusercontent.com/YOUR-USERNAME/trailer-shop-db/main/schema.json"
+                                target="_blank">View Raw</a></td>
+                    </tr>
+                    <tr>
+                        <td>functions.sql</td>
+                        <td>All database functions</td>
+                        <td><a href="https://raw.githubusercontent.com/YOUR-USERNAME/trailer-shop-db/main/functions.sql"
+                                target="_blank">View Raw</a></td>
+                    </tr>
+                    <tr>
+                        <td>views.sql</td>
+                        <td>All database views</td>
+                        <td><a href="https://raw.githubusercontent.com/YOUR-USERNAME/trailer-shop-db/main/views.sql"
+                                target="_blank">View Raw</a></td>
+                    </tr>
+                </table>
+            
+                <h3>Documentation</h3>
+                <table>
+                    <tr>
+                        <th>Document</th>
+                        <th>Purpose</th>
+                        <th>Link</th>
+                    </tr>
+                    <tr>
+                        <td>PRD.md</td>
+                        <td>Product Requirements Document</td>
+                        <td><a href="https://raw.githubusercontent.com/YOUR-USERNAME/trailer-shop-db/main/PRD.md"
+                                target="_blank">View Raw</a></td>
+                    </tr>
+                    <tr>
+                        <td>MIGRATION.md</td>
+                        <td>Next.js migration notes</td>
+                        <td><a href="https://raw.githubusercontent.com/YOUR-USERNAME/trailer-shop-db/main/MIGRATION.md"
+                                target="_blank">View Raw</a></td>
+                    </tr>
+                </table>
+            
+                <h3>How AI Should Use This</h3>
+                <div class="card">
+                    <p><strong>Prompt Template for AI Assistants:</strong></p>
+                    <pre><code>"Before we begin, please read the project documentation:
+            1. Overview: https://YOUR-USERNAME.github.io/trailer-shop-db/
+            2. Database Schema: https://raw.githubusercontent.com/YOUR-USERNAME/trailer-shop-db/main/schema.json
+            3. Current Functions: https://raw.githubusercontent.com/YOUR-USERNAME/trailer-shop-db/main/functions.sql
+            
+            This will give you complete context about the project."</code></pre>
+                </div>
+            </section>
+
+            <!-- BUSINESS CONTEXT -->
+            <section id="context">
+                <h2>Business Context</h2>
+                
+                <h3>The Team</h3>
+                <div class="card">
+                    <p><strong>2-Person Operation:</strong></p>
+                    <ul>
+                        <li><strong>Nikki:</strong> Financial operations, database design, app development</li>
+                        <li><strong>Cody:</strong> Service manager, lead technician, customer-facing</li>
+                    </ul>
+                    <p><strong>Reality Check:</strong> This is not a Fortune 500 company. Solutions must fit a 2-person trailer shop, not enterprise IT infrastructure.</p>
+                </div>
+                
+                <h3>The Cody Code™</h3>
+                <div class="alert alert-warning">
+                    <strong>Every database/UI decision filters through these 4 questions:</strong>
+                    <ol>
+                        <li>Does it eliminate more work than it creates?</li>
+                        <li>Is its function immediately obvious without a manual?</li>
+                        <li>Does it feel like a natural extension of a real-world action (talking, writing, looking)?</li>
+                        <li>Does it build confidence by feeling like a reliable assistant?</li>
+                    </ol>
+                </div>
+                
+                <h3>Cody's Profile</h3>
+                <ul>
+                    <li><strong>Mechanical Expert:</strong> Brilliant with trailers, not computers</li>
+                    <li><strong>Environment:</strong> Grease on hands, noisy shop, mobile/tablet use</li>
+                    <li><strong>Input Preference:</strong> Voice > Photo > Touch > Typing (avoid typing entirely)</li>
+                    <li><strong>Left-handed:</strong> UI must accommodate southpaw ergonomics</li>
+                    <li><strong>Adoption Risk:</strong> If it's hard, he'll abandon it for paper</li>
+                </ul>
+                
+                <h3>Zero-Typing Pathways (Required)</h3>
+                <table>
+                    <tr>
+                        <th>Method</th>
+                        <th>Use Case</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr>
+                        <td><strong>OCR</strong></td>
+                        <td>Photo of handwritten invoice → structured data</td>
+                        <td><span class="badge badge-danger">Not Built</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Voice/Speech-to-Text</strong></td>
+                        <td>Speak customer name, part descriptions, notes</td>
+                        <td><span class="badge badge-danger">Not Built</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Barcode/QR Scan</strong></td>
+                        <td>Scan part → auto-populate item</td>
+                        <td><span class="badge badge-danger">Not Built</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>NFC Tap</strong></td>
+                        <td>Tap part tag → resolve item_id</td>
+                        <td><span class="badge badge-danger">Not Built</span></td>
+                    </tr>
+                </table>
+                
+                <h3>Business Rules</h3>
+                <ul>
+                    <li><strong>Tax Rate:</strong> 7% (Arkansas)</li>
+                    <li><strong>Misc Supplies:</strong> 4% of (parts + service) subtotal, BUT if that exceeds $25, use 2.5% instead</li>
+                    <li><strong>Payment Application:</strong> Account-level payments apply to oldest invoices first (FIFO waterfall)</li>
+                    <li><strong>Partial Records:</strong> Database MUST accept incomplete data (first name only, phone only, etc.)</li>
+                </ul>
+            </section>
+            
+            <!-- DATABASE SCHEMA -->
+            <section id="schema">
+                <h2>Database Schema</h2>
+                
+                <h3>Core Tables (22 Total)</h3>
+                
+                <h4>Customer Management</h4>
+                <table>
+                    <tr>
+                        <th>Table</th>
+                        <th>Purpose</th>
+                        <th>Key Fields</th>
+                    </tr>
+                    <tr>
+                        <td><code>customer_accounts</code></td>
+                        <td>Master customer records</td>
+                        <td>account_id (PK), account_name, account_type, billing address</td>
+                    </tr>
+                    <tr>
+                        <td><code>contact_information</code></td>
+                        <td>Customer contacts (multiple per account)</td>
+                        <td>contact_id (PK), account_id (FK), phone, email, is_primary</td>
+                    </tr>
+                    <tr>
+                        <td><code>customer_trailers</code></td>
+                        <td>Trailer asset registry (33 spec fields)</td>
+                        <td>trailer_id (PK), account_id (FK), VIN, manufacturer, axle specs, bearing specs</td>
+                    </tr>
+                    <tr>
+                        <td><code>lead_tracking</code></td>
+                        <td>Sales pipeline before conversion</td>
+                        <td>lead_id (PK), contact info, service needed, lead_status</td>
+                    </tr>
+                </table>
+                
+                <h4>Financial Documents</h4>
+                <table>
+                    <tr>
+                        <th>Table</th>
+                        <th>Purpose</th>
+                        <th>Key Fields</th>
+                    </tr>
+                    <tr>
+                        <td><code>customer_invoices</code></td>
+                        <td>Invoice headers</td>
+                        <td>invoice_number (PK), account_id (FK), trailer_id (FK), totals, status</td>
+                    </tr>
+                    <tr>
+                        <td><code>customer_invoice_details</code></td>
+                        <td>Invoice line items</td>
+                        <td>invoice_line_item_id (PK), invoice_number (FK), item_id (FK), quantity, prices</td>
+                    </tr>
+                    <tr>
+                        <td><code>customer_estimates</code></td>
+                        <td>Quote headers</td>
+                        <td>estimate_number (PK), account_id (FK), expiry date, status</td>
+                    </tr>
+                    <tr>
+                        <td><code>customer_estimate_details</code></td>
+                        <td>Quote line items</td>
+                        <td>estimate_line_item_id (PK), estimate_number (FK), item details</td>
+                    </tr>
+                    <tr>
+                        <td><code>payments</code></td>
+                        <td>Account-level payments</td>
+                        <td>payment_id (PK), account_id (FK), amount_total, payment_method</td>
+                    </tr>
+                </table>
+                
+                <h4>Operations</h4>
+                <table>
+                    <tr>
+                        <th>Table</th>
+                        <th>Purpose</th>
+                        <th>Key Fields</th>
+                    </tr>
+                    <tr>
+                        <td><code>jobs_tracking</code></td>
+                        <td>Work order management</td>
+                        <td>job_id (PK), account_id (FK), trailer_id (FK), status, promised_date</td>
+                    </tr>
+                    <tr>
+                        <td><code>job_details</code></td>
+                        <td>Job line items (parts/labor)</td>
+                        <td>job_details_id (PK), job_id (FK), item_id (FK), hours, service details</td>
+                    </tr>
+                    <tr>
+                        <td><code>tasks</code></td>
+                        <td>Task management (polymorphic)</td>
+                        <td>task_id (PK), parent_entity_id, parent_entity_type, due_date, status</td>
+                    </tr>
+                    <tr>
+                        <td><code>notes</code></td>
+                        <td>Entity annotations (polymorphic)</td>
+                        <td>note_id (PK), parent_entity_id, parent_entity_type, note_content</td>
+                    </tr>
+                </table>
+                
+                <h4>Inventory & Purchasing</h4>
+                <table>
+                    <tr>
+                        <th>Table</th>
+                        <th>Purpose</th>
+                        <th>Key Fields</th>
+                    </tr>
+                    <tr>
+                        <td><code>parts_information</code></td>
+                        <td>Parts catalog & inventory</td>
+                        <td>item_id (PK), item_name, quantities (ordered/invoiced/in_stock), avg costs</td>
+                    </tr>
+                    <tr>
+                        <td><code>parts_vendors</code></td>
+                        <td>Part-vendor relationships</td>
+                        <td>parts_vendor_id (PK), item_id, vendor_id, vendor_item_number</td>
+                    </tr>
+                    <tr>
+                        <td><code>vendor_information</code></td>
+                        <td>Vendor directory</td>
+                        <td>vendor_id (PK), vendor_name, contact info, credentials</td>
+                    </tr>
+                    <tr>
+                        <td><code>purchase_orders</code></td>
+                        <td>PO headers</td>
+                        <td>purchase_order_number (PK), vendor_id (FK), status, delivery dates</td>
+                    </tr>
+                    <tr>
+                        <td><code>purchase_order_details</code></td>
+                        <td>PO line items</td>
+                        <td>po_line_item_id (PK), purchase_order_number (FK), item_id (FK), costs</td>
+                    </tr>
+                    <tr>
+                        <td><code>trailer_build_sheets</code></td>
+                        <td>Standard parts per trailer</td>
+                        <td>build_sheet_id (PK), trailer_id, item_id, last_price_charged</td>
+                    </tr>
+                </table>
+                
+                <h4>Reference Data</h4>
+                <table>
+                    <tr>
+                        <th>Table</th>
+                        <th>Purpose</th>
+                    </tr>
+                    <tr>
+                        <td><code>item_types</code></td>
+                        <td>Part vs Service classification</td>
+                    </tr>
+                    <tr>
+                        <td><code>item_categories</code></td>
+                        <td>Mid-level taxonomy</td>
+                    </tr>
+                    <tr>
+                        <td><code>item_subcategories</code></td>
+                        <td>Detailed taxonomy</td>
+                    </tr>
+                    <tr>
+                        <td><code>service_types</code></td>
+                        <td>Type of service (Inspection, Repair, etc.) with rates</td>
+                    </tr>
+                    <tr>
+                        <td><code>service_area</code></td>
+                        <td>Trailer area (Axles, Brakes, Electrical, etc.)</td>
+                    </tr>
+                    <tr>
+                        <td><code>settings</code></td>
+                        <td>Business rules (tax rate, misc thresholds)</td>
+                    </tr>
+                    <tr>
+                        <td><code>staff_information</code></td>
+                        <td>Staff roster (minimal - only 2 people)</td>
+                    </tr>
+                </table>
+                
+                <h3>Critical Constraint Removals</h3>
+                <div class="alert alert-warning">
+                    <strong>Why constraints were removed:</strong> To enable partial data entry (OCR/voice input will be incomplete).
+                </div>
+                
+                <ul>
+                    <li><code>customer_invoice_details.item_name</code> → Changed from NOT NULL to nullable</li>
+                    <li><code>customer_invoice_details.quantity</code> → Changed from NOT NULL to nullable</li>
+                    <li><code>customer_invoice_details.item_total</code> → Changed from NOT NULL to nullable</li>
+                    <li>Foreign key on <code>item_name</code> → Dropped entirely (kept FK on item_id only)</li>
+                </ul>
+                
+                <p><strong>Result:</strong> Cody can create invoice line items with minimal data, app enriches later.</p>
+            </section>
+            
+            <!-- FUNCTIONS -->
+            <section id="functions">
+                <h2>Database Functions</h2>
+                
+                <h3>ID Generation Functions</h3>
+                
+                <h4>generate_lead_code(first_name, last_name, company_name, account_type)</h4>
+                <div class="card">
+                    <p><strong>Returns:</strong> 3-letter code (e.g., JOD, ALC, DCE)</p>
+                    <p><strong>Logic:</strong></p>
+                    <ul>
+                        <li><strong>Individual:</strong> First 2 letters of first name + 1 of last (John Davis → JOD)</li>
+                        <li><strong>Company:</strong> First letter of first 3 words (Acme Lawncare → ALC, Delta Construction Equipment → DCE)</li>
+                    </ul>
+                </div>
+                
+                <h4>generate_account_id(first_name, last_name, company_name, account_type, date_created)</h4>
+                <div class="card">
+                    <p><strong>Returns:</strong> CST-[code][MMDDYY]</p>
+                    <p><strong>Example:</strong> <code>CST-JOD111025</code> (John Davis, Nov 10, 2025)</p>
+                </div>
+                
+                <h4>generate_invoice_number(account_id, invoice_date)</h4>
+                <div class="card">
+                    <p><strong>Returns:</strong> INV-[code][MMDDYY]</p>
+                    <p><strong>Example:</strong> <code>INV-KUM111625</code></p>
+                </div>
+                
+                <h4>generate_estimate_number(account_id, estimate_date)</h4>
+                <div class="card">
+                    <p><strong>Returns:</strong> EST-[code][MMDDYY]</p>
+                </div>
+                
+                <h4>generate_job_id(account_id, created_date)</h4>
+                <div class="card">
+                    <p><strong>Returns:</strong> JOB-[code][MMDDYY]</p>
+                </div>
+                
+                <h4>generate_trailer_id(account_id)</h4>
+                <div class="card">
+                    <p><strong>Returns:</strong> TRL-[code][sequential]</p>
+                    <p><strong>Example:</strong> <code>TRL-JOD001</code>, <code>TRL-JOD002</code></p>
+                    <p><strong>Logic:</strong> Counts existing trailers for account, adds 1, pads to 3 digits</p>
+                </div>
+                
+                <h4>generate_payment_id(account_id, payment_date)</h4>
+                <div class="card">
+                    <p><strong>Returns:</strong> PAY-[code][MMDDYY]</p>
+                </div>
+                
+                <h3>Business Logic Functions</h3>
+                
+                <h4>get_setting_numeric(key, default)</h4>
+                <div class="card">
+                    <p><strong>Purpose:</strong> Retrieve business rule values from settings table</p>
+                    <p><strong>Example:</strong></p>
+                    <pre><code>SELECT get_setting_numeric('tax_rate', 0.07);
+-- Returns: 0.07</code></pre>
+                </div>
+                
+                <h4>convert_lead_to_account(lead_id)</h4>
+                <div class="card">
+                    <p><strong>Purpose:</strong> Convert lead to customer account + contact + trailer</p>
+                    <p><strong>Returns:</strong> JSON with new IDs</p>
+                    <pre><code>{
+  "account_id": "CST-MIR111625",
+  "contact_id": "uuid...",
+  "trailer_id": "TRL-MIR001"
+}</code></pre>
+                    <p><strong>Actions:</strong></p>
+                    <ol>
+                        <li>Creates customer_accounts record</li>
+                        <li>Creates contact_information record (is_primary = true)</li>
+                        <li>Creates customer_trailers record (if trailer info exists)</li>
+                        <li>Updates lead_tracking.lead_status = 'converted'</li>
+                    </ol>
+                </div>
+                
+                <h3>Trigger Functions</h3>
+                
+                <h4>update_timestamp()</h4>
+                <div class="card">
+                    <p><strong>Purpose:</strong> Automatically set updated_at = NOW() on UPDATE</p>
+                    <p><strong>Applied to 14 tables:</strong> customer_accounts, customer_trailers, parts_information, vendor_information, purchase_orders, customer_estimates, customer_invoices, jobs_tracking, lead_tracking, payments, notes, tasks, parts_vendors, trailer_build_sheets</p>
+                </div>
+                
+                <h4>update_parts_on_po_receive()</h4>
+                <div class="card">
+                    <p><strong>Trigger:</strong> After UPDATE on purchase_orders</p>
+                    <p><strong>Logic:</strong> When PO status changes to 'received', updates parts_information:</p>
+                    <ul>
+                        <li>Increments quantity_ordered by PO line item quantities</li>
+                        <li>Increments quantity_in_stock by PO line item quantities</li>
+                    </ul>
+                </div>
+                
+                <h4>update_parts_on_invoice()</h4>
+                <div class="card">
+                    <p><strong>Trigger:</strong> After INSERT on customer_invoice_details</p>
+                    <p><strong>Logic:</strong> When invoice line item added with line_item_type = 'part':</p>
+                    <ul>
+                        <li>Increments parts_information.quantity_invoiced</li>
+                        <li>Decrements parts_information.quantity_in_stock</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <!-- VIEWS -->
+            <section id="views">
+                <h2>Database Views</h2>
+                
+                <h3>Financial Calculation Views</h3>
+                
+                <h4>v_invoice_totals</h4>
+                <div class="card">
+                    <p><strong>Purpose:</strong> Auto-calculate invoice totals from line items</p>
+                    <p><strong>Returns per invoice:</strong></p>
+                    <ul>
+                        <li><code>parts_subtotal</code> - Sum of parts line items</li>
+                        <li><code>service_subtotal</code> - Sum of service line items</li>
+                        <li><code>misc_shop_supplies</code> - 4% or 2.5% based on $25 threshold</li>
+                        <li><code>invoice_subtotal</code> - parts + service + misc</li>
+                        <li><code>invoice_tax</code> - subtotal × 7%</li>
+                        <li><code>invoice_total</code> - subtotal + tax</li>
+                    </ul>
+                    <p><strong>Misc Calculation Logic:</strong></p>
+                    <pre><code>IF (parts + service) × 4% > $25
+  THEN use (parts + service) × 2.5%
+  ELSE use (parts + service) × 4%</code></pre>
+                </div>
+                
+                <h4>v_estimate_totals</h4>
+                <div class="card">
+                    <p><strong>Purpose:</strong> Identical logic to v_invoice_totals, but for estimates</p>
+                    <p><strong>Returns:</strong> estimate_subtotal, estimate_tax, estimate_total, etc.</p>
+                </div>
+                
+                <h3>Customer Views</h3>
+                
+                <h4>v_customer_search</h4>
+                <div class="card">
+                    <p><strong>Purpose:</strong> Fast customer lookup by phone/name/email</p>
+                    <p><strong>Joins:</strong> customer_accounts + contact_information + trailers + jobs + invoices</p>
+                    <p><strong>Returns:</strong></p>
+                    <ul>
+                        <li>Account and contact details</li>
+                        <li>trailer_count, job_count, invoice_count</li>
+                        <li>total_revenue (sum of invoice totals)</li>
+                    </ul>
+                    <p><strong>Usage:</strong></p>
+                    <pre><code>SELECT * FROM v_customer_search 
+WHERE contact_phone ILIKE '%555-1212%'
+   OR contact_first_name ILIKE '%Mike%';</code></pre>
+                </div>
+                
+                <h4>v_account_balance</h4>
+                <div class="card">
+                    <p><strong>Purpose:</strong> Account-level financial summary</p>
+                    <p><strong>Returns per account:</strong></p>
+                    <ul>
+                        <li><code>total_invoiced</code> - Sum of all invoice totals</li>
+                        <li><code>total_payments</code> - Sum of all payments</li>
+                        <li><code>balance_due</code> - total_invoiced - total_payments</li>
+                    </ul>
+                </div>
+                
+                <h4>v_invoice_paid_status</h4>
+                <div class="card">
+                    <p><strong>Purpose:</strong> FIFO waterfall payment application to invoices</p>
+                    <p><strong>Logic:</strong> Account payments apply to oldest invoices first (by invoice_date)</p>
+                    <p><strong>Returns per invoice:</strong></p>
+                    <ul>
+                        <li><code>amount_paid</code> - Portion of account payments allocated to this invoice</li>
+                        <li><code>balance_due</code> - invoice_total - amount_paid</li>
+                        <li><code>payment_status</code> - 'paid_in_full' | 'partial_payment' | 'unpaid'</li>
+                    </ul>
+                </div>
+                
+                <h3>Inventory Views</h3>
+                
+                <h4>v_parts_inventory</h4>
+                <div class="card">
+                    <p><strong>Purpose:</strong> Part profitability calculations</p>
+                    <p><strong>Returns per part:</strong></p>
+                    <ul>
+                        <li><code>total_cost</code> - SUM(purchase_order_details.item_total) for this part</li>
+                        <li><code>total_sales</code> - SUM(customer_invoice_details.item_total) for this part</li>
+                        <li><code>margin_dollars</code> - total_sales - total_cost</li>
+                        <li><code>margin_percent</code> - margin_dollars ÷ total_sales</li>
+                    </ul>
+                    <p><strong>Usage:</strong> Join with parts_information to get full part details + profitability</p>
+                </div>
+                
+                <h4>v_vendor_totals</h4>
+                <div class="card">
+                    <p><strong>Purpose:</strong> Vendor spending summary</p>
+                    <p><strong>Returns per vendor:</strong></p>
+                    <ul>
+                        <li><code>total_po_count</code> - Number of POs placed with vendor</li>
+                        <li><code>total_spend</code> - Sum of all PO totals with vendor</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <!-- MISTAKES TO AVOID -->
+            <section id="mistakes">
+                <h2>Avoid These Mistakes</h2>
+                
+                <div class="alert alert-danger">
+                    <strong>🚨 CRITICAL: Read This Section First</strong><br>
+                    These mistakes cost hours of debugging and redesign. Learn from them.
+                </div>
+                
+                <h3>1. Don't Assume Schema Details</h3>
+                <div class="card">
+                    <p><strong>❌ Wrong:</strong> Assuming field names, constraints, or table structures without checking schema.json</p>
+                    <p><strong>✅ Right:</strong> Always reference the actual schema file before writing SQL</p>
+                    <p><strong>Example Errors Made:</strong></p>
+                    <ul>
+                        <li>Assumed table was named "job_service_details" when it's actually "job_details"</li>
+                        <li>Tried to write functions with wrong column names</li>
+                        <li>Created views referencing non-existent fields</li>
+                    </ul>
+                </div>
+                
+                <h3>2. Don't Overcomplicate Simple Calculations</h3>
+                <div class="card">
+                    <p><strong>❌ Wrong:</strong> <code>SUM(pod.quantity * pod.unit_cost)</code></p>
+                    <p><strong>✅ Right:</strong> <code>SUM(pod.item_total)</code></p>
+                    <p><strong>Why:</strong> The item_total field already exists in the table. Use it.</p>
+                </div>
+                
+                <h3>3. Don't Assume Business Rules</h3>
+                <div class="card">
+                    <p><strong>Errors Made:</strong></p>
+                    <ul>
+                        <li>Assumed 9.5% tax rate → Actual: 7%</li>
+                        <li>Assumed $625 misc threshold → Actual: $25</li>
+                        <li>Assumed inventory alerts needed → Reality: Custom-order shop, not Walmart</li>
+                    </ul>
+                    <p><strong>✅ Right:</strong> Ask before implementing business logic. Check existing functions.sql file.</p>
+                </div>
+                
+                <h3>4. Don't Design for Fortune 500 Scale</h3>
+                <div class="card">
+                    <p><strong>❌ Wrong Approach:</strong></p>
+                    <ul>
+                        <li>Creating 15 different views for different queries</li>
+                        <li>Building complex normalization for edge cases</li>
+                        <li>Adding features "just in case"</li>
+                        <li>Enforcing strict constraints that block partial data</li>
+                    </ul>
+                    <p><strong>✅ Right Approach:</strong></p>
+                    <ul>
+                        <li>Minimal views that calculate what app can't</li>
+                        <li>App handles sorting/filtering of existing data</li>
+                        <li>Build for actual needs, not theoretical scale</li>
+                        <li>Flexible constraints that allow incomplete records</li>
+                    </ul>
+                </div>
+                
+                <h3>5. Don't Add Unnecessary Constraints</h3>
+                <div class="card">
+                    <p><strong>❌ Wrong:</strong> NOT NULL on every field, foreign keys with CASCADE DELETE</p>
+                    <p><strong>✅ Right:</strong> Nullable fields for partial data, no CASCADE deletes (preserve history)</p>
+                    <p><strong>Why:</strong> Cody will get errors if required fields are strict. OCR/voice won't capture everything.</p>
+                </div>
+                
+                <h3>6. Don't Create Duplicate Data in Views</h3>
+                <div class="card">
+                    <p><strong>❌ Wrong:</strong> Including parts_information columns in v_parts_inventory view</p>
+                    <p><strong>✅ Right:</strong> View only contains CALCULATIONS (total_cost, total_sales, margins)</p>
+                    <p><strong>Why:</strong> App can join parts_information + v_parts_inventory. Don't duplicate 20 columns.</p>
+                </div>
+                
+                <h3>7. Don't Ignore Real-World Use Cases</h3>
+                <div class="card">
+                    <p><strong>Reality:</strong> Look at the crumpled paper invoice (image provided in session).</p>
+                    <p><strong>That's the starting point.</strong> Not pristine data entry by trained operators.</p>
+                    <ul>
+                        <li>Handwriting will be messy → OCR will make mistakes</li>
+                        <li>Phone calls will be incomplete → Only have first name and phone number</li>
+                        <li>Walk-ins won't have all info → Skip trailer details, add later</li>
+                    </ul>
+                    <p><strong>Design for chaos, not perfection.</strong></p>
+                </div>
+                
+                <h3>8. Remember: NoSQL vs SQL Trade-offs</h3>
+                <div class="card">
+                    <p><strong>Why Nikki Preferred NoSQL:</strong></p>
+                    <ul>
+                        <li>Data shaped by actual usage patterns</li>
+                        <li>Nested objects match UI needs (vendorItems array, notes array)</li>
+                        <li>No rigid table structures blocking partial writes</li>
+                        <li>Easier to understand for non-database experts</li>
+                    </ul>
+                    <p><strong>Why We're Using SQL:</strong></p>
+                    <ul>
+                        <li>Better for financial calculations (SUM, aggregations)</li>
+                        <li>Referential integrity prevents invoice → deleted customer</li>
+                        <li>Reporting queries are simpler (JOIN vs denormalized traversal)</li>
+                        <li>Supabase provides SQL database out of box</li>
+                    </ul>
+                    <p><strong>Lesson:</strong> Make SQL work like NoSQL would (flexible constraints, calculation views, app-side joins).</p>
+                </div>
+            </section>
+            
+            <!-- NEXT.JS INTEGRATION -->
+            <section id="integration">
+                <h2>Next.js Integration</h2>
+                
+                <h3>Current Stack</h3>
+                <ul>
+                    <li><strong>Framework:</strong> Next.js 15.5.4 (ready for Next.js 16)</li>
+                    <li><strong>React:</strong> 19.2.0</li>
+                    <li><strong>Database:</strong> Supabase</li>
+                    <li><strong>Auth:</strong> Supabase Auth with SSR</li>
+                </ul>
+                
+                <h3>Next.js 16 Compatibility Note</h3>
+                <div class="alert alert-warning">
+                    <strong>Breaking Change:</strong> middleware.ts → proxy.ts<br>
+                    When upgrading to Next.js 16, rename middleware.ts to proxy.ts and export function named "proxy" instead of "middleware".
+                </div>
+                
+                <h3>File Structure</h3>
+                <pre><code>src/
+├── types/
+│   └── database.types.ts         # Supabase generated types
+├── lib/
+│   ├── supabase/
+│   │   ├── client.ts             # Browser client
+│   │   └── server.ts             # Server client
+│   └── db/
+│       ├── invoices.ts           # Invoice CRUD + totals
+│       ├── customers.ts          # Search + balance
+│       ├── leads.ts              # Conversion logic
+│       ├── payments.ts           # Payment recording
+│       └── parts.ts              # Parts queries
+└── app/
+    └── actions/
+        ├── invoice.ts            # Server actions
+        └── customer.ts           # Server actions</code></pre>
+        
+                <h3>Step 1: Generate TypeScript Types</h3>
+                <pre><code>npx supabase gen types typescript --project-id YOUR_PROJECT_REF > src/types/database.types.ts</code></pre>
+                
+                <h3>Step 2: Create Supabase Clients</h3>
+                
+                <h4>src/lib/supabase/client.ts (Client Components)</h4>
+                <pre><code>import { createBrowserClient } from '@supabase/ssr';
+import type { Database } from '@/types/database.types';
+
+export function createClient() {
+  return createBrowserClient&lt;Database&gt;(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+}</code></pre>
+
+                <h4>src/lib/supabase/server.ts (Server Components)</h4>
+                <pre><code>import { createServerClient } from '@supabase/ssr';
+import { cookies } from 'next/headers';
+import type { Database } from '@/types/database.types';
+
+export async function createClient() {
+  const cookieStore = await cookies();
+
+  return createServerClient&lt;Database&gt;(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll();
+        },
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) => {
+              (cookieStore.set as any)(name, value, options);
+            });
+          } catch {}
+        },
+      },
+    }
+  );
+}</code></pre>
+                
+                <h3>Step 3: Database Query Functions</h3>
+                
+                <h4>src/lib/db/invoices.ts</h4>
+                <pre><code>import { createClient } from '@/lib/supabase/server';
+
+export async function createInvoice(accountId: string, invoiceDate: string) {
+  const supabase = await createClient();
+  
+  const { data: invoiceNumber } = await supabase
+    .rpc('generate_invoice_number', { 
+      p_account_id: accountId, 
+      p_invoice_date: invoiceDate 
+    });
+
+  const { data, error } = await supabase
+    .from('customer_invoices')
+    .insert({
+      invoice_number: invoiceNumber,
+      account_id: accountId,
+      invoice_date: invoiceDate,
+      invoice_status: 'draft'
+    })
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+export async function getInvoiceWithTotals(invoiceNumber: string) {
+  const supabase = await createClient();
+
+  const { data: invoice } = await supabase
+    .from('customer_invoices')
+    .select('*')
+    .eq('invoice_number', invoiceNumber)
+    .single();
+
+  const { data: totals } = await supabase
+    .from('v_invoice_totals')
+    .select('*')
+    .eq('invoice_number', invoiceNumber)
+    .single();
+
+  const { data: lineItems } = await supabase
+    .from('customer_invoice_details')
+    .select('*')
+    .eq('invoice_number', invoiceNumber);
+
+  return { invoice, totals, lineItems };
+}</code></pre>
+
+                <h4>src/lib/db/customers.ts</h4>
+                <pre><code>import { createClient } from '@/lib/supabase/server';
+
+export async function searchCustomers(query: string) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from('v_customer_search')
+    .select('*')
+    .or(`contact_phone.ilike.%${query}%,contact_first_name.ilike.%${query}%,account_name.ilike.%${query}%`)
+    .limit(10);
+
+  if (error) throw error;
+  return data;
+}</code></pre>
+                
+                <h3>Step 4: Server Actions</h3>
+                
+                <h4>src/app/actions/invoice.ts</h4>
+                <pre><code>'use server';
+
+import { createInvoice } from '@/lib/db/invoices';
+import { revalidatePath } from 'next/cache';
+
+export async function createInvoiceAction(accountId: string, invoiceDate: string) {
+  const invoice = await createInvoice(accountId, invoiceDate);
+  revalidatePath('/employee/invoices');
+  return invoice;
+}</code></pre>
+                
+                <h3>Usage in Components</h3>
+                
+                <h4>Server Component Example</h4>
+                <pre><code>// app/employee/invoices/[id]/page.tsx
+import { getInvoiceWithTotals } from '@/lib/db/invoices';
+
+export default async function InvoicePage({ params }: { params: { id: string } }) {
+  const { invoice, totals, lineItems } = await getInvoiceWithTotals(params.id);
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Invoice {invoice.invoice_number}&lt;/h1&gt;
+      &lt;p&gt;Total: ${totals.invoice_total}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+
+                <h4>Client Component with Form</h4>
+                <pre><code>'use client';
+
+import { useState } from 'react';
+import { createInvoiceAction } from '@/app/actions/invoice';
+
+export function CreateInvoiceForm({ accountId }: { accountId: string }) {
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setLoading(true);
+    
+    const invoice = await createInvoiceAction(
+      accountId, 
+      new Date().toISOString().split('T')[0]
+    );
+    
+    window.location.href = `/employee/invoices/${invoice.invoice_number}`;
+  }
+
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;button type="submit" disabled={loading}&gt;
+        Create Invoice
+      &lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</code></pre>
+            </section>
+            
+            <!-- NEXT STEPS -->
+            <section id="nextsteps">
+                <h2>Next Steps</h2>
+                
+                <h3>Immediate Priorities (This Week)</h3>
+                
+                <div class="card">
+                    <h4>1. Complete Next.js Integration (Day 1)</h4>
+                    <ul>
+                        <li>Generate TypeScript types from Supabase</li>
+                        <li>Create client/server utilities</li>
+                        <li>Implement database query functions</li>
+                        <li>Create server actions</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h4>2. Build Invoice Creation Page (Day 2-3)</h4>
+                    <p><strong>Goal:</strong> Cody can create digital invoice in &lt; 60 seconds</p>
+                    <ul>
+                        <li>Customer search/select (phone/name autocomplete)</li>
+                        <li>Trailer selection (if customer has trailers)</li>
+                        <li>Line items manager (add parts/labor)</li>
+                        <li>Totals display (auto-calculated from v_invoice_totals)</li>
+                        <li>Save draft → Complete invoice</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h4>3. Implement OCR Pipeline (Day 4-5)</h4>
+                    <ul>
+                        <li>Photo capture component (mobile camera)</li>
+                        <li>OCR processing (Tesseract.js or GPT-4 Vision)</li>
+                        <li>Parse handwritten invoice → line items</li>
+                        <li>Fuzzy match parts against parts_information</li>
+                        <li>Present matches for Cody confirmation</li>
+                    </ul>
+                </div>
+                
+                <h3>High Priority (Next 2 Weeks)</h3>
+                
+                <ul>
+                    <li><strong>Voice Input:</strong> Integrate Web Speech API for all search/form fields</li>
+                    <li><strong>Customer Lookup UI:</strong> Instant search showing full context (trailers, jobs, balance)</li>
+                    <li><strong>Parts Search & Barcode:</strong> QuaggaJS integration for barcode scanning</li>
+                    <li><strong>Trailer Details Page:</strong> Specs + build sheet + service history</li>
+                    <li><strong>Job Management:</strong> Kanban board, status updates, photo attachments</li>
+                </ul>
+                
+                <h3>Medium Priority (Month 2)</h3>
+                
+                <ul>
+                    <li>Estimate generation with PDF export</li>
+                    <li>Purchase order creation and receiving workflow</li>
+                    <li>Task management system</li>
+                    <li>Lead intake and conversion</li>
+                    <li>Payment recording</li>
+                </ul>
+                
+                <h3>Lower Priority (Future)</h3>
+                
+                <ul>
+                    <li>Customer portal (read-only access)</li>
+                    <li>Advanced reporting and analytics</li>
+                    <li>Automated notifications</li>
+                    <li>Email/SMS integration</li>
+                </ul>
+                
+                <h3>Database Gaps to Address</h3>
+                
+                <div class="alert alert-info">
+                    <strong>Optional Enhancements (Not Critical):</strong>
+                    <ul>
+                        <li>Add indexes for performance (if queries slow down)</li>
+                        <li>Create materialized views (if real-time calc too slow)</li>
+                        <li>Implement Row-Level Security policies (when auth added)</li>
+                        <li>Add audit trail tables (who created/modified records)</li>
+                    </ul>
+                </div>
+                
+                <h3>Success Metrics</h3>
+                
+                <table>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Target</th>
+                        <th>Current</th>
+                    </tr>
+                    <tr>
+                        <td>Invoice creation time</td>
+                        <td>&lt; 60 seconds</td>
+                        <td class="badge badge-danger">Manual (5+ min)</td>
+                    </tr>
+                    <tr>
+                        <td>Customer lookup time</td>
+                        <td>&lt; 10 seconds</td>
+                        <td class="badge badge-danger">Manual (30+ sec)</td>
+                    </tr>
+                    <tr>
+                        <td>Cody adoption rate</td>
+                        <td>100% digital invoices</td>
+                        <td class="badge badge-danger">0% (all paper)</td>
+                    </tr>
+                    <tr>
+                        <td>Data accuracy</td>
+                        <td>95%+ complete records</td>
+                        <td class="badge badge-danger">~30% (missing data)</td>
+                    </tr>
+                    <tr>
+                        <td>Profitability visibility</td>
+                        <td>Real-time per-part margins</td>
+                        <td class="badge badge-danger">Unknown</td>
+                    </tr>
+                </table>
+            </section>
+        </div>
+        
+        <footer>
+            <p><strong>The Trailer Shop Database Implementation Guide</strong></p>
+            <p>Last Updated: November 16, 2025 | Database Status: ✅ Complete & Operational</p>
+            <p style="margin-top: 10px; font-size: 0.9em; opacity: 0.8;">
+                This guide should be shared with all AI assistants (Claude, GPT, Gemini) working on this project.<br>
+                It contains critical context that prevents repeated mistakes and saves hours of debugging.
+            </p>
+        </footer>
+    </div>
+    
+    <script>
+        // Navigation
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('section');
+        
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                
+                // Update active nav
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                
+                // Update active section
+                sections.forEach(s => s.classList.remove('active'));
+                document.getElementById(targetId).classList.add('active');
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+        
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const content = document.getElementById('content');
+        
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            
+            if (query.length < 2) {
+                // Clear highlights
+                content.querySelectorAll('.search-highlight').forEach(el => {
+                    el.outerHTML = el.innerHTML;
+                });
+                return;
+            }
+            
+            // Simple search: highlight matching text
+            sections.forEach(section => {
+                const text = section.textContent.toLowerCase();
+                if (text.includes(query)) {
+                    section.classList.add('active');
+                    navLinks.forEach(link => {
+                        if (link.getAttribute('href') === '#' + section.id) {
+                            link.classList.add('active');
+                        } else {
+                            link.classList.remove('active');
+                        }
+                    });
+                }
+            });
+        });
+        
+        // Copy code blocks on click
+        document.querySelectorAll('pre').forEach(pre => {
+            pre.style.cursor = 'pointer';
+            pre.title = 'Click to copy';
+            pre.addEventListener('click', () => {
+                const code = pre.textContent;
+                navigator.clipboard.writeText(code).then(() => {
+                    const originalBg = pre.style.background;
+                    pre.style.background = '#1e7e34';
+                    setTimeout(() => {
+                        pre.style.background = originalBg;
+                    }, 200);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1583 @@
+[
+    {
+        "schema_info": [
+            {
+                "table_name": "contact_information",
+                "columns": {
+                    "contact_id": "text",
+                    "contact_first_name": "text",
+                    "contact_last_name": "text",
+                    "contact_phone": "text",
+                    "contact_email": "text",
+                    "date_contact_added": "date",
+                    "updated_date": "date",
+                    "contact_authorizations": "contact_authorization[]",
+                    "is_primary": "boolean",
+                    "contact_autonum": "bigint",
+                    "preferred_contact_method": "preferred_contact_method[]",
+                    "account_id": "text"
+                },
+                "primary_key": "contact_id",
+                "foreign_keys": [
+                    {
+                        "columns": [
+                            "account_id"
+                        ],
+                        "foreign_table": "customer_accounts",
+                        "foreign_columns": [
+                            "account_id"
+                        ]
+                    }
+                ]
+            },
+            {
+                "table_name": "customer_accounts",
+                "columns": {
+                    "account_name": "text",
+                    "account_id": "text",
+                    "account_type": {
+                        "type": "enum",
+                        "enum_name": "account_type",
+                        "values": [
+                            "individual",
+                            "company"
+                        ]
+                    },
+                    "company_name": "text",
+                    "billing_street": "text",
+                    "billing_city": "text",
+                    "billing_state": "text",
+                    "billing_zip_code": "text",
+                    "date_created": "date",
+                    "last_modified": "date"
+                },
+                "primary_key": "account_id",
+                "foreign_keys": []
+            },
+            {
+                "table_name": "customer_estimate_details",
+                "columns": {
+                    "estimate_line_item_id": "text",
+                    "item_id": "text",
+                    "service_type_id": "text",
+                    "service_area_id": "text",
+                    "labor_description": "text",
+                    "service_rate": "money12_2",
+                    "sales_price": "money12_2",
+                    "quantity": "qty12_3",
+                    "unit_rate": "money12_2",
+                    "item_total": "money12_2",
+                    "line_item_type": {
+                        "type": "enum",
+                        "enum_name": "line_item_type",
+                        "values": [
+                            "part",
+                            "service"
+                        ]
+                    },
+                    "estimate_number": "text"
+                },
+                "primary_key": "estimate_line_item_id",
+                "foreign_keys": [
+                    {
+                        "columns": [
+                            "estimate_number"
+                        ],
+                        "foreign_table": "customer_estimates",
+                        "foreign_columns": [
+                            "estimate_number"
+                        ]
+                    },
+                    {
+                        "columns": [
+                            "item_id"
+                        ],
+                        "foreign_table": "parts_information",
+                        "foreign_columns": [
+                            "item_id"
+                        ]
+                    },
+                    {
+                        "columns": [
+                            "service_area_id"
+                        ],
+                        "foreign_table": "service_area",
+                        "foreign_columns": [
+                            "service_area_id"
+                        ]
+                    },
+                    {
+                        "columns": [
+                            "service_type_id"
+                        ],
+                        "foreign_table": "service_types",
+                        "foreign_columns": [
+                            "service_type_id"
+                        ]
+                    }
+                ]
+            },
+            {
+                "table_name": "customer_estimates",
+                "columns": {
+                    "estimate_number": "text",
+                    "account_id": "text",
+                    "estimate_date": "date",
+                    "terms_days": "integer",
+                    "est_exp_date": "date",
+                    "estimate_status": {
+                        "type": "enum",
+                        "enum_name": "estimate_status",
+                        "values": [
+                            "draft",
+                            "sent_waiting",
+                            "accepted",
+                            "needs_edits",
+                            "rejected_hard",
+                            "rejected_future_fu"
+                        ]
+                    },
+                    "parts_subtotal": "money12_2",
+                    "service_subtotal": "money12_2",
+                    "misc_shop_supplies": "money12_2",
+                    "estimate_subtotal": "money12_2",
+                    "estimate_tax": "money12_2",
+                    "estimate_total": "money12_2",
+                    "trailer_id": "text",
+                    "est_response_date": "date",
+                    "created_at": "timestamp with time zone",
+                    "updated_at": "timestamp with time zone"
+                },
+                "primary_key": "estimate_number",
+                "foreign_keys": [
+                    {
+                        "columns": [
+                            "account_id"
+                        ],
+                        "foreign_table": "customer_accounts",
+                        "foreign_columns": [
+                            "account_id"
+                        ]
+                    },
+                    {
+                        "columns": [
+                            "trailer_id"
+                        ],
+                        "foreign_table": "customer_trailers",
+                        "foreign_columns": [
+                            "trailer_id"
+                        ]
+                    }
+                ]
+            },
+            {
+                "table_name": "customer_invoice_details",
+                "columns": {
+                    "invoice_line_item_autonum": "bigint",
+                    "invoice_line_item_id": "text",
+                    "invoice_number": "text",
+                    "item_name": "text",
+                    "item_id": "text",
+                    "service_type_id": "text",
+                    "service_area_id": "text",
+                    "labor_description": "text",
+                    "service_rate": "money12_2",
+                    "sales_price": "money12_2",
+                    "quantity": "qty12_3",
+                    "unit_rate": "money12_2",
+                    "item_total": "money12_2",
+                    "line_item_type": {
+                        "type": "enum",
+                        "enum_name": "line_item_type",
+                        "values": [
+                            "part",
+                            "service"
+                        ]
+                    }
+                },
+                "primary_key": "invoice_line_item_id",
+                "foreign_keys": [
+                    {
+                        "columns": [
+                            "invoice_number"
+                        ],
+                        "foreign_table": "customer_invoices",
+                        "foreign_columns": [
+                            "invoice_number"
+                        ]
+                    },
+                    {
+                        "columns": [
+                            "item_id"
+                        ],
+                        "foreign_table": "parts_information",
+                        "foreign_columns": [
+                            "item_id"
+                        ]
+                    },
+                    {
+                        "columns": [
+                            "service_area_id"
+                        ],
+                        "foreign_table": "service_area",
+                        "foreign_columns": [
+                            "service_area_id"
+                        ]
+                    },
+                    {
+                        "columns": [
+                            "service_type_id"
+                        ],
+                        "foreign_table": "service_types",
+                        "foreign_columns": [
+                            "service_type_id"
+                        ]
+                    }
+                ]
+            },
+            {
+                "table_name": "customer_invoices",
+                "columns": {
+                    "invoice_number": "text",
+                    "account_id": "text",
+                    "invoice_date": "date",
+                    "invoice_due_date": "date",
+                    "invoice_status": {
+                        "type": "enum",
+                        "enum_name": "invoice_status",
+                        "values": [
+                            "draft",
+                            "sent",
+                            "paid_in_full",
+                            "overdue",
+                            "needs_edit",
+                            "partial_payment"
+                        ]
+                    },
+                    "parts_subtotal": "money12_2",
+                    "service_subtotal": "money12_2",
+                    "misc_shop_supplies": "money12_2",
+                    "invoice_subtotal": "money12_2",
+                    "invoice_tax": "money12_2",
+                    "invoice_total": "money12_2",
+                    "trailer_id": "text",
+                    "estimate_number": "text",
+                    "job_id": "text",
+                    "created_at": "timestamp with time zone",
+                    "updated_at": "timestamp with time zone"
+                },
+                "primary_key": "invoice_number",
+                "foreign_keys": [
+                    {
+                        "columns": [
+                            "account_id"
+                        ],
+                        "foreign_table": "customer_accounts",
+                        "foreign_columns": [
+                            "account_id"
+                        ]
+                    },
+                    {
+                        "columns": [
+                            "estimate_number"
+                        ],
+                        "foreign_table": "customer_estimates",
+                        "foreign_columns": [
+                            "estimate_number"
+                        ]
+                    },
+                    {
+                        "columns": [
+                            "job_id"
+                        ],
+                        "foreign_table": "jobs_tracking",
+                        "foreign_columns": [
+                            "job_id"
+                        ]
+                    },
+                    {
+                        "columns": [
+                            "trailer_id"
+                        ],
+                        "foreign_table": "customer_trailers",
+                        "foreign_columns": [
+                            "trailer_id"
+                        ]
+                    }
+                ]
+            },
+            {
+                "table_name": "customer_trailers",
+                "columns": {
+                    "trailer_name": "text",
+                    "trailer_type": {
+                        "type": "enum",
+                        "enum_name": "trailer_type",
+                        "values": [
+                            "car_hauler",
+                            "equipment",
+                            "enclosed_cargo",
+                            "dump",
+                            "flatbed",
+                            "horse",
+                            "landscaping",
+                            "stock",
+                            "utility",
+                            "tilt",
+                            "other"
+                        ]
+                    },
+                    "trailer_vin": "text",
+                    "license_plate_number": "text",
+                    "trailer_manufacturer": {
+                        "type": "enum",
+                        "enum_name": "trailer_manufacturer",
+                        "values": [
+                            "big_tex",
+                            "diamond_c",
+                            "doolittle_trailer_mfg",
+                            "interstate",
+                            "maxx-d",
+                            "nationwide",
+                            "pj",
+                            "rj",
+                            "top_hat",
+                            "tow_master",
+                            "x-cel",
+                            "other"
+                        ]
+                    },
+                    "date_manufactured": "date",
+                    "coupler": {
+                        "type": "enum",
+                        "enum_name": "coupler",
+                        "values": [
+                            "a-frame",
+                            "flat_mount",
+                            "gooseneck",
+                            "straight",
+                            "other"
+                        ]
+                    },
+                    "color": {
+                        "type": "enum",
+                        "enum_name": "color",
+                        "values": [
+                            "black",
+                            "white",
+                            "red",
+                            "brown",
+                            "green",
+                            "silver",
+                            "other"
+                        ]
+                    },
+                    "length_ft": "numeric",
+                    "width_ft": "numeric",
+                    "gawr": "numeric",
+                    "axle_count": "numeric",
+                    "axle_capacity": {
+                        "type": "enum",
+                        "enum_name": "axle_capacity",
+                        "values": [
+                            "2.2k",
+                            "3.5k",
+                            "5.2k",
+                            "6k",
+                            "7k",
+                            "8k",
+                            "9k",
+                            "10k",
+                            "12k"
+                        ]
+                    },
+                    "hubface": "text",
+                    "spring_center": "text",
+                    "beam_diameter": {
+                        "type": "enum",
+                        "enum_name": "beam_diameter",
+                        "values": [
+                            "1-3/4\"",
+                            "2-3/8\"",
+                            "3\"",
+                            "4\"",
+                            "5\""
+                        ]
+                    },
+                    "spindle": {
+                        "type": "enum",
+                        "enum_name": "spindle",
+                        "values": [
+                            "straight",
+                            "drop_4\"",
+                            "torsion",
+                            "other"
+                        ]
+                    },
+                    "brake_type": {
+                        "type": "enum",
+                        "enum_name": "brake_type",
+                        "values": [
+                            "idler",
+                            "electric",
+                            "hydraulic",
+                            "electric_hydraulic"
+                        ]
+                    },
+                    "bolt_pattern": {
+                        "type": "enum",
+                        "enum_name": "bolt_pattern",
+                        "values": [
+                            "440",
+                            "545",
+                            "550",
+                            "555",
+                            "655",
+                            "660",
+                            "865",
+                            "880",
+                            "sel655"
+                        ]
+                    },
+                    "inner_bearing_race": {
+                        "type": "enum",
+                        "enum_name": "inner_bearing_race",
+                        "values": [
+                            "l44643/l44610",
+                            "l44649/l44610",
+                            "lm48548/lm48510",
+                            "l68149/l68111",
+                            "2788/2729",
+                            "lm501349/lm501310",
+                            "25580/25520",
+                            "28580/28521",
+                            "387a/382a",
+                            "395s/394a",
+                            "3984/3920",
+                            "hm218248/hm218210",
+                            "other"
+                        ]
+                    },
+                    "outer_bearing_race": {
+                        "type": "enum",
+                        "enum_name": "outer_bearing_race",
+                        "values": [
+                            "lm11949/lm11910",
+                            "1779/1729",
+                            "l44643/l44610",
+                            "l44649/l44610",
+                            "lm67048/lm67010",
+                            "15123/15245",
+                            "14125a/14276",
+                            "d02475/d02420",
+                            "2585/2520",
+                            "lm501349/lm501310",
+                            "25580/25520",
+                            "387a/382a",
+                            "28682/28622",
+                            "hm212049/hm212011"
+                        ]
+                    },
+                    "seal": "text",
+                    "spring_type": {
+                        "type": "enum",
+                        "enum_name": "spring_type",
+                        "values": [
+                            "double_eye",
+                            "slipper"
+                        ]
+                    },
+                    "leaf_count": "numeric",
+                    "spring_width": "numeric",
+                    "spring_length": "numeric",
+                    "spring_position": {
+                        "type": "enum",
+                        "enum_name": "spring_position",
+                        "values": [
+                            "underslung",
+                            "overslung"
+                        ]
+                    },
+                    "lights": {
+                        "type": "enum",
+                        "enum_name": "lights",
+                        "values": [
+                            "incandescent",
+                            "led"
+                        ]
+                    },
+                    "jack": {
+                        "type": "enum",
+                        "enum_name": "jack",
+                        "values": [
+                            "a-frame_2k_top-wind",
+                            "a-frame_2k_side-wind",
+                            "a-frame_5k_top-wind",
+                            "a-frame_5k_side-wind",
+                            "a-frame_3.5k_powered",
+                            "swivel_mount_1k_top-wind",
+                            "swivel_mount_1.5k_side-wind",
+                            "swivel_mount_2k_top-wind",
+                            "swivel_mount_2k_side-wind",
+                            "swivel_mount_5k_top-wind",
+                            "swivel_mount_5k_side-wind",
+                            "swivel_mount_8k_side-wind",
+                            "drop-leg_8k_top-wind",
+                            "drop-leg_8k_side-wind",
+                            "drop-leg_10k_top-wind",
+                            "drop-leg_10k_side-wind",
+                            "drop-leg_12k_top-wind_spring-loaded",
+                            "drop-leg_12k_side-wind_spring-loaded",
+                            "gooseneck_12k_single-speed",
+                            "gooseneck_25k_dual-speed",
+                            "gooseneck_25k_hydraulic",
+                            "square_jack_7k_side-wind",
+                            "square_jack_12k_side-wind",
+                            "stabilizer_5k_manual",
+                            "stabilizer_7k_manual",
+                            "stabilizer_10k_drop-down",
+                            "other"
+                        ]
+                    },
+                    "tire_size": {
+                        "type": "enum",
+                        "enum_name": "tire_size",
+                        "values": [
+                            "st175/80r13",
+                            "st185/80r13",
+                            "st205/75r13",
+                            "st185/75r14",
+                            "st205/75r14",
+                            "st215/75r14",
+                            "st225/75r14",
+                            "st205/75r15",
+                            "st225/75r15",
+                            "st235/80r15",
+                            "st215/85r16",
+                            "st225/75r16",
+                            "st235/80r16",
+                            "st235/85r16",
+                            "215/75r17.5",
+                            "235/75r17.5",
+                            "245/70r17.5",
+                            "225/70r19.5",
+                            "245/70r19.5",
+                            "265/70r19.5",
+                            "275/70r22.5",
+                            "285/75r22.5",
+                            "295/75r22.5",
+                            "4.80-8",
+                            "5.70-8",
+                            "4.80-12",
+                            "5.30-12",
+                            "20.5x8-12",
+                            "145r13",
+                            "155r13",
+                            "165r13",
+                            "175r14",
+                            "185r14",
+                            "175r15",
+                            "185r15",
+                            "other"
+                        ]
+                    },
+                    "tire_load_range": {
+                        "type": "enum",
+                        "enum_name": "tire_load_range",
+                        "values": [
+                            "load_range_b_4-ply",
+                            "load_range_c_6-ply",
+                            "load_range_d_8-ply",
+                            "load_range_e_10-ply",
+                            "load_range_f_12-ply",
+                            "load_range_g_14-ply",
+                            "load_range_h_16-ply",
+                            "load_range_j_18-ply"
+                        ]
+                    },
+                    "account_id": "text",
+                    "trailer_id": "text",
+                    "created_at": "timestamp with time zone",
+                    "updated_at": "timestamp with time zone"
+                },
+                "primary_key": "trailer_id",
+                "foreign_keys": [
+                    {
+                        "columns": [
+                            "account_id"
+                        ],
+                        "foreign_table": "customer_accounts",
+                        "foreign_columns": [
+                            "account_id"
+                        ]
+                    }
+                ]
+            },
+            {
+                "table_name": "item_categories",
+                "columns": {
+                    "category_id": "text",
+                    "category_code": "text",
+                    "category_name": "text",
+                    "type_id": "text"
+                },
+                "primary_key": "category_id",
+                "foreign_keys": [
+                    {
+                        "columns": [
+                            "type_id"
+                        ],
+                        "foreign_table": "item_types",
+                        "foreign_columns": [
+                            "type_id"
+                        ]
+                    }
+                ]
+            },
+            {
+                "table_name": "item_subcategories",
+                "columns": {
+                    "category_id": "text",
+                    "subcategory_code": "text",
+                    "subcategory_id": "text",
+                    "subcategory_name": "text"
+                },
+                "primary_key": "subcategory_id",
+                "foreign_keys": [
+                    {
+                        "columns": [
+                            "category_id"
+                        ],
+                        "foreign_table": "item_categories",
+                        "foreign_columns": [
+                            "category_id"
+                        ]
+                    }
+                ]
+            },
+            {
+                "table_name": "item_types",
+                "columns": {
+                    "type_code": "text",
+                    "type_id": "text",
+                    "type_name": "text"
+                },
+                "primary_key": "type_id",
+                "foreign_keys": []
+            },
+            {
+                "table_name": "job_details",
+                "columns": {
+                    "job_details_id": "text",
+                    "job_id": "text",
+                    "line_item_type": {
+                        "type": "enum",
+                        "enum_name": "line_item_type",
+                        "values": [
+                            "part",
+                            "service"
+                        ]
+                    },
+                    "item_id": "text",
+                    "service_area_id": "text",
+                    "service_type_id": "text",
+                    "hours": "numeric",
+                    "service_description": "text"
+                },
+                "primary_key": "job_details_id",
+                "foreign_keys": [
+                    {
+                        "columns": [
+                            "item_id"
+                        ],
+                        "foreign_table": "parts_information",
+                        "foreign_columns": [
+                            "item_id"
+                        ]
+                    },
+                    {
+                        "columns": [
+                            "job_id"
+                        ],
+                        "foreign_table": "jobs_tracking",
+                        "foreign_columns": [
+                            "job_id"
+                        ]
+                    },
+                    {
+                        "columns": [
+                            "service_area_id"
+                        ],
+                        "foreign_table": "service_area",
+                        "foreign_columns": [
+                            "service_area_id"
+                        ]
+                    },
+                    {
+                        "columns": [
+                            "service_type_id"
+                        ],
+                        "foreign_table": "service_types",
+                        "foreign_columns": [
+                            "service_type_id"
+                        ]
+                    }
+                ]
+            },
+            {
+                "table_name": "jobs_tracking",
+                "columns": {
+                    "job_id": "text",
+                    "job_name": "text",
+                    "job_description": "text",
+                    "trailer_id": "text",
+                    "job_status": {
+                        "type": "enum",
+                        "enum_name": "status",
+                        "values": [
+                            "scheduled",
+                            "in_progress",
+                            "completed",
+                            "cancelled",
+                            "on_hold",
+                            "blocked",
+                            "not_started"
+                        ]
+                    },
+                    "job_priority": {
+                        "type": "enum",
+                        "enum_name": "priority",
+                        "values": [
+                            "immediate",
+                            "high",
+                            "medium",
+                            "low"
+                        ]
+                    },
+                    "estimated_hours": "numeric",
+                    "actual_hours": "numeric",
+                    "job_progress": "text",
+                    "promised_date": "date",
+                    "completed_date": "date",
+                    "dropoff_date": "date",
+                    "invoice_generated": "boolean",
+                    "invoice_number": "text",
+                    "created_date": "date",
+                    "account_id": "text",
+                    "updated_at": "timestamp with time zone"
+                },
+                "primary_key": "job_id",
+                "foreign_keys": [
+                    {
+                        "columns": [
+                            "account_id"
+                        ],
+                        "foreign_table": "customer_accounts",
+                        "foreign_columns": [
+                            "account_id"
+                        ]
+                    },
+                    {
+                        "columns": [
+                            "invoice_number"
+                        ],
+                        "foreign_table": "customer_invoices",
+                        "foreign_columns": [
+                            "invoice_number"
+                        ]
+                    },
+                    {
+                        "columns": [
+                            "trailer_id"
+                        ],
+                        "foreign_table": "customer_trailers",
+                        "foreign_columns": [
+                            "trailer_id"
+                        ]
+                    }
+                ]
+            },
+            {
+                "table_name": "kv_store_b6b4130b",
+                "columns": {
+                    "key": "text",
+                    "value": "jsonb"
+                },
+                "primary_key": "key",
+                "foreign_keys": []
+            },
+            {
+                "table_name": "lead_tracking",
+                "columns": {
+                    "lead_id": "text",
+                    "lead_priority": {
+                        "type": "enum",
+                        "enum_name": "priority",
+                        "values": [
+                            "immediate",
+                            "high",
+                            "medium",
+                            "low"
+                        ]
+                    },
+                    "lead_status": {
+                        "type": "enum",
+                        "enum_name": "lead_status",
+                        "values": [
+                            "initial_contact",
+                            "needs_follow-up",
+                            "waiting_for_reply",
+                            "converted",
+                            "lost",
+                            "future_contact",
+                            "other"
+                        ]
+                    },
+                    "contact_date": "date",
+                    "lead_first_name": "text",
+                    "lead_last_name": "text",
+                    "company_name": "text",
+                    "contact_phone_number": "text",
+                    "email": "text",
+                    "description_of_service": "text",
+                    "billing_street": "text",
+                    "billing_city": "text",
+                    "billing_state": "text",
+                    "billing_zip": "text",
+                    "scheduled_drop_off": "date",
+                    "promised_date": "date",
+                    "service_components": "service_components[]",
+                    "trailer_type": {
+                        "type": "enum",
+                        "enum_name": "trailer_type",
+                        "values": [
+                            "car_hauler",
+                            "equipment",
+                            "enclosed_cargo",
+                            "dump",
+                            "flatbed",
+                            "horse",
+                            "landscaping",
+                            "stock",
+                            "utility",
+                            "tilt",
+                            "other"
+                        ]
+                    },
+                    "manufacturer": {
+                        "type": "enum",
+                        "enum_name": "trailer_manufacturer",
+                        "values": [
+                            "big_tex",
+                            "diamond_c",
+                            "doolittle_trailer_mfg",
+                            "interstate",
+                            "maxx-d",
+                            "nationwide",
+                            "pj",
+                            "rj",
+                            "top_hat",
+                            "tow_master",
+                            "x-cel",
+                            "other"
+                        ]
+                    },
+                    "date_manufactured": "date",
+                    "coupler": {
+                        "type": "enum",
+                        "enum_name": "coupler",
+                        "values": [
+                            "a-frame",
+                            "flat_mount",
+                            "gooseneck",
+                            "straight",
+                            "other"
+                        ]
+                    },
+                    "length_ft": "numeric",
+                    "width_ft": "numeric",
+                    "gawr": "numeric",
+                    "axle_count": "numeric",
+                    "vehicle_year": "numeric",
+                    "vehicle_make": {
+                        "type": "enum",
+                        "enum_name": "vehicle_make",
+                        "values": [
+                            "acura",
+                            "audi",
+                            "bmw",
+                            "buick",
+                            "cadillac",
+                            "chevrolet",
+                            "chrysler",
+                            "dodge",
+                            "ford",
+                            "genesis",
+                            "gmc",
+                            "honda",
+                            "hyundai",
+                            "infiniti",
+                            "isuzu",
+                            "jaguar",
+                            "jeep",
+                            "kia",
+                            "land rover",
+                            "lexus",
+                            "lincoln",
+                            "mazda",
+                            "mercedes-benz",
+                            "mitsubishi",
+                            "nissan",
+                            "other",
+                            "porsche",
+                            "ram",
+                            "subaru",
+                            "suzuki",
+                            "tesla",
+                            "toyota",
+                            "volkswagen",
+                            "volvo"
+                        ]
+                    },
+                    "vehicle_trim": "text",
+                    "service_needed": "service_needed[]",
+                    "vehicle_model": "text",
+                    "account_type": {
+                        "type": "enum",
+                        "enum_name": "account_type",
+                        "values": [
+                            "individual",
+                            "company"
+                        ]
+                    },
+                    "preferred_contact_method": "preferred_contact_method[]",
+                    "created_at": "timestamp with time zone",
+                    "updated_at": "timestamp with time zone"
+                },
+                "primary_key": "lead_id",
+                "foreign_keys": []
+            },
+            {
+                "table_name": "notes",
+                "columns": {
+                    "note_id": "text",
+                    "author_id": "text",
+                    "parent_entity_id": "text",
+                    "parent_entity_type": "text",
+                    "note_title": "text",
+                    "note_content": "text",
+                    "created_at": "timestamp with time zone",
+                    "updated_at": "timestamp with time zone"
+                },
+                "primary_key": "note_id",
+                "foreign_keys": [
+                    {
+                        "columns": [
+                            "author_id"
+                        ],
+                        "foreign_table": "staff_information",
+                        "foreign_columns": [
+                            "staff_id"
+                        ]
+                    }
+                ]
+            },
+            {
+                "table_name": "parts_information",
+                "columns": {
+                    "part_autonum": "bigint",
+                    "item_name": "text",
+                    "item_id": "text",
+                    "item_description": "text",
+                    "type_id": "text",
+                    "category_id": "text",
+                    "subcategory_id": "text",
+                    "workflow_details": "text",
+                    "sop_steps": "text",
+                    "sop_summary": "text",
+                    "quantity_ordered": "qty12_3",
+                    "average_unit_cost": "money12_2",
+                    "quantity_invoiced": "qty12_3",
+                    "average_unit_sales_price": "money12_2",
+                    "quantity_in_stock": "qty12_3",
+                    "created_at": "timestamp with time zone",
+                    "updated_at": "timestamp with time zone"
+                },
+                "primary_key": "item_id",
+                "foreign_keys": [
+                    {
+                        "columns": [
+                            "category_id"
+                        ],
+                        "foreign_table": "item_categories",
+                        "foreign_columns": [
+                            "category_id"
+                        ]
+                    },
+                    {
+                        "columns": [
+                            "subcategory_id"
+                        ],
+                        "foreign_table": "item_subcategories",
+                        "foreign_columns": [
+                            "subcategory_id"
+                        ]
+                    },
+                    {
+                        "columns": [
+                            "type_id"
+                        ],
+                        "foreign_table": "item_types",
+                        "foreign_columns": [
+                            "type_id"
+                        ]
+                    }
+                ]
+            },
+            {
+                "table_name": "parts_vendors",
+                "columns": {
+                    "parts_vendor_id": "text",
+                    "item_id": "text",
+                    "vendor_id": "text",
+                    "vendor_item_number": "text",
+                    "created_at": "timestamp with time zone",
+                    "updated_at": "timestamp with time zone"
+                },
+                "primary_key": "parts_vendor_id",
+                "foreign_keys": [
+                    {
+                        "columns": [
+                            "item_id"
+                        ],
+                        "foreign_table": "parts_information",
+                        "foreign_columns": [
+                            "item_id"
+                        ]
+                    },
+                    {
+                        "columns": [
+                            "vendor_id"
+                        ],
+                        "foreign_table": "vendor_information",
+                        "foreign_columns": [
+                            "vendor_id"
+                        ]
+                    }
+                ]
+            },
+            {
+                "table_name": "payments",
+                "columns": {
+                    "payment_id": "text",
+                    "account_id": "text",
+                    "payment_date": "date",
+                    "amount_total": "numeric(12,2)",
+                    "payment_method": "text",
+                    "reference_number": "text",
+                    "created_at": "timestamp with time zone",
+                    "updated_at": "timestamp with time zone"
+                },
+                "primary_key": "payment_id",
+                "foreign_keys": [
+                    {
+                        "columns": [
+                            "account_id"
+                        ],
+                        "foreign_table": "customer_accounts",
+                        "foreign_columns": [
+                            "account_id"
+                        ]
+                    }
+                ]
+            },
+            {
+                "table_name": "purchase_order_details",
+                "columns": {
+                    "po_line_item_id": "text",
+                    "purchase_order_number": "text",
+                    "vendor_item_number": "text",
+                    "type_id": "text",
+                    "category_id": "text",
+                    "subcategory_id": "text",
+                    "item_name": "text",
+                    "item_id": "text",
+                    "quantity": "qty12_3",
+                    "unit_cost": "money12_2",
+                    "item_total": "money12_2"
+                },
+                "primary_key": "po_line_item_id",
+                "foreign_keys": [
+                    {
+                        "columns": [
+                            "category_id"
+                        ],
+                        "foreign_table": "item_categories",
+                        "foreign_columns": [
+                            "category_id"
+                        ]
+                    },
+                    {
+                        "columns": [
+                            "item_id"
+                        ],
+                        "foreign_table": "parts_information",
+                        "foreign_columns": [
+                            "item_id"
+                        ]
+                    },
+                    {
+                        "columns": [
+                            "purchase_order_number"
+                        ],
+                        "foreign_table": "purchase_orders",
+                        "foreign_columns": [
+                            "purchase_order_number"
+                        ]
+                    },
+                    {
+                        "columns": [
+                            "subcategory_id"
+                        ],
+                        "foreign_table": "item_subcategories",
+                        "foreign_columns": [
+                            "subcategory_id"
+                        ]
+                    },
+                    {
+                        "columns": [
+                            "type_id"
+                        ],
+                        "foreign_table": "item_types",
+                        "foreign_columns": [
+                            "type_id"
+                        ]
+                    }
+                ]
+            },
+            {
+                "table_name": "purchase_orders",
+                "columns": {
+                    "po_autonum": "bigint",
+                    "purchase_order_number": "text",
+                    "purchase_order_date": "date",
+                    "vendor_id": "text",
+                    "vendor_po_number": "text",
+                    "purchase_order_method": {
+                        "type": "enum",
+                        "enum_name": "purchase_order_method",
+                        "values": [
+                            "online",
+                            "phone",
+                            "in_person"
+                        ]
+                    },
+                    "purchase_order_total": "money12_2",
+                    "purchase_order_status": {
+                        "type": "enum",
+                        "enum_name": "po_status",
+                        "values": [
+                            "ordered",
+                            "shipped",
+                            "partial",
+                            "cancelled",
+                            "received"
+                        ]
+                    },
+                    "po_est_del_date": "date",
+                    "po_act_del_date": "date",
+                    "created_at": "timestamp with time zone",
+                    "updated_at": "timestamp with time zone"
+                },
+                "primary_key": "purchase_order_number",
+                "foreign_keys": [
+                    {
+                        "columns": [
+                            "vendor_id"
+                        ],
+                        "foreign_table": "vendor_information",
+                        "foreign_columns": [
+                            "vendor_id"
+                        ]
+                    }
+                ]
+            },
+            {
+                "table_name": "service_area",
+                "columns": {
+                    "service_area_name": "text",
+                    "service_area_code": "text",
+                    "service_area_id": "text"
+                },
+                "primary_key": "service_area_id",
+                "foreign_keys": []
+            },
+            {
+                "table_name": "service_types",
+                "columns": {
+                    "service_type_name": "text",
+                    "service_type_id": "text",
+                    "rate": "numeric"
+                },
+                "primary_key": "service_type_id",
+                "foreign_keys": []
+            },
+            {
+                "table_name": "settings",
+                "columns": {
+                    "setting_key": "text",
+                    "setting_value": "numeric",
+                    "description": "text",
+                    "updated_at": "timestamp with time zone"
+                },
+                "primary_key": "setting_key",
+                "foreign_keys": []
+            },
+            {
+                "table_name": "staff_information",
+                "columns": {
+                    "staff_id": "text",
+                    "first_name": "text",
+                    "last_name": "text",
+                    "phone": "text",
+                    "email": "text"
+                },
+                "primary_key": "staff_id",
+                "foreign_keys": []
+            },
+            {
+                "table_name": "tasks",
+                "columns": {
+                    "task_id": "text",
+                    "title": "text",
+                    "description": "text",
+                    "due_date": "timestamp with time zone",
+                    "priority": {
+                        "type": "enum",
+                        "enum_name": "priority",
+                        "values": [
+                            "immediate",
+                            "high",
+                            "medium",
+                            "low"
+                        ]
+                    },
+                    "task_category": {
+                        "type": "enum",
+                        "enum_name": "task_category",
+                        "values": [
+                            "follow_up",
+                            "customer_scheduling",
+                            "billing",
+                            "trailer_inspection",
+                            "trailer_repair",
+                            "quality_control",
+                            "parts_ordering",
+                            "inventory_management",
+                            "vendor_coordination",
+                            "documentation",
+                            "facility_maintenance",
+                            "marketing",
+                            "accounting",
+                            "regulatory_compliance",
+                            "general"
+                        ]
+                    },
+                    "parent_entity_id": "text",
+                    "parent_entity_type": "text",
+                    "status": {
+                        "type": "enum",
+                        "enum_name": "status",
+                        "values": [
+                            "scheduled",
+                            "in_progress",
+                            "completed",
+                            "cancelled",
+                            "on_hold",
+                            "blocked",
+                            "not_started"
+                        ]
+                    },
+                    "assigned_to_id": "text",
+                    "created_at": "timestamp with time zone",
+                    "updated_at": "timestamp with time zone"
+                },
+                "primary_key": "task_id",
+                "foreign_keys": [
+                    {
+                        "columns": [
+                            "assigned_to_id"
+                        ],
+                        "foreign_table": "staff_information",
+                        "foreign_columns": [
+                            "staff_id"
+                        ]
+                    }
+                ]
+            },
+            {
+                "table_name": "trailer_build_sheets",
+                "columns": {
+                    "build_sheet_id": "text",
+                    "trailer_id": "text",
+                    "item_id": "text",
+                    "item_name": "text",
+                    "vendor_item_number": "text",
+                    "last_price_charged": "numeric(12,2)",
+                    "notes": "text",
+                    "updated_at": "timestamp with time zone"
+                },
+                "primary_key": "build_sheet_id",
+                "foreign_keys": [
+                    {
+                        "columns": [
+                            "item_id"
+                        ],
+                        "foreign_table": "parts_information",
+                        "foreign_columns": [
+                            "item_id"
+                        ]
+                    },
+                    {
+                        "columns": [
+                            "trailer_id"
+                        ],
+                        "foreign_table": "customer_trailers",
+                        "foreign_columns": [
+                            "trailer_id"
+                        ]
+                    }
+                ]
+            },
+            {
+                "table_name": "v_account_balance",
+                "columns": {
+                    "account_id": "text",
+                    "account_name": "text",
+                    "total_invoiced": "numeric",
+                    "total_payments": "numeric",
+                    "balance_due": "numeric"
+                },
+                "primary_key": null,
+                "foreign_keys": []
+            },
+            {
+                "table_name": "v_customer_search",
+                "columns": {
+                    "account_id": "text",
+                    "account_name": "text",
+                    "account_type": {
+                        "type": "enum",
+                        "enum_name": "account_type",
+                        "values": [
+                            "individual",
+                            "company"
+                        ]
+                    },
+                    "company_name": "text",
+                    "billing_street": "text",
+                    "billing_city": "text",
+                    "billing_state": "text",
+                    "billing_zip_code": "text",
+                    "contact_id": "text",
+                    "contact_first_name": "text",
+                    "contact_last_name": "text",
+                    "contact_phone": "text",
+                    "contact_email": "text",
+                    "is_primary": "boolean",
+                    "trailer_count": "bigint",
+                    "job_count": "bigint",
+                    "invoice_count": "bigint",
+                    "total_revenue": "numeric"
+                },
+                "primary_key": null,
+                "foreign_keys": []
+            },
+            {
+                "table_name": "v_estimate_totals",
+                "columns": {
+                    "estimate_number": "text",
+                    "parts_subtotal": "numeric(12,2)",
+                    "service_subtotal": "numeric(12,2)",
+                    "number_of_items": "bigint",
+                    "misc_shop_supplies": "numeric(12,2)",
+                    "estimate_subtotal": "numeric(12,2)",
+                    "estimate_tax": "numeric(12,2)",
+                    "estimate_total": "numeric(12,2)"
+                },
+                "primary_key": null,
+                "foreign_keys": []
+            },
+            {
+                "table_name": "v_invoice_paid_status",
+                "columns": {
+                    "invoice_number": "text",
+                    "account_id": "text",
+                    "invoice_total": "numeric(12,2)",
+                    "amount_paid": "numeric",
+                    "balance_due": "numeric",
+                    "payment_status": "text"
+                },
+                "primary_key": null,
+                "foreign_keys": []
+            },
+            {
+                "table_name": "v_invoice_totals",
+                "columns": {
+                    "invoice_number": "text",
+                    "parts_subtotal": "numeric(12,2)",
+                    "service_subtotal": "numeric(12,2)",
+                    "number_of_items": "bigint",
+                    "misc_shop_supplies": "numeric(12,2)",
+                    "invoice_subtotal": "numeric(12,2)",
+                    "invoice_tax": "numeric(12,2)",
+                    "invoice_total": "numeric(12,2)"
+                },
+                "primary_key": null,
+                "foreign_keys": []
+            },
+            {
+                "table_name": "v_part_details",
+                "columns": {
+                    "item_id": "text",
+                    "item_name": "text",
+                    "item_description": "text",
+                    "type_name": "text",
+                    "category_name": "text",
+                    "subcategory_name": "text",
+                    "avg_unit_cost": "money12_2",
+                    "avg_unit_price": "money12_2",
+                    "total_cost": "numeric",
+                    "total_revenue": "numeric",
+                    "profit": "numeric",
+                    "avg_margin_percent": "numeric",
+                    "total_cost_stock": "numeric",
+                    "current_margin_dollars": "numeric",
+                    "ytd_units": "qty12_3"
+                },
+                "primary_key": null,
+                "foreign_keys": []
+            },
+            {
+                "table_name": "v_part_vendor_pricing",
+                "columns": {
+                    "item_id": "text",
+                    "vendor_id": "text",
+                    "vendor_name": "text",
+                    "vendor_item_number": "text",
+                    "last_cost": "money12_2",
+                    "avg_cost": "numeric",
+                    "last_purchase_date": "date"
+                },
+                "primary_key": null,
+                "foreign_keys": []
+            },
+            {
+                "table_name": "v_parts_highest_revenue",
+                "columns": {
+                    "item_id": "text",
+                    "item_name": "text",
+                    "total_revenue": "numeric"
+                },
+                "primary_key": null,
+                "foreign_keys": []
+            },
+            {
+                "table_name": "v_parts_inventory",
+                "columns": {
+                    "item_id": "text",
+                    "total_cost": "numeric",
+                    "total_sales": "numeric",
+                    "margin_dollars": "numeric",
+                    "margin_percent": "numeric"
+                },
+                "primary_key": null,
+                "foreign_keys": []
+            },
+            {
+                "table_name": "v_parts_lowest_margin",
+                "columns": {
+                    "item_id": "text",
+                    "item_name": "text",
+                    "average_unit_cost": "money12_2",
+                    "average_unit_sales_price": "money12_2",
+                    "margin_percent": "numeric"
+                },
+                "primary_key": null,
+                "foreign_keys": []
+            },
+            {
+                "table_name": "v_parts_most_used",
+                "columns": {
+                    "item_id": "text",
+                    "item_name": "text",
+                    "units_sold": "qty12_3"
+                },
+                "primary_key": null,
+                "foreign_keys": []
+            },
+            {
+                "table_name": "v_vendor_totals",
+                "columns": {
+                    "vendor_id": "text",
+                    "total_po_count": "bigint",
+                    "total_spend": "numeric"
+                },
+                "primary_key": null,
+                "foreign_keys": []
+            },
+            {
+                "table_name": "vendor_information",
+                "columns": {
+                    "vendor_name": "text",
+                    "vendor_id": "text",
+                    "vendor_type": {
+                        "type": "enum",
+                        "enum_name": "vendor_type",
+                        "values": [
+                            "supplier",
+                            "retailer",
+                            "asset_holder",
+                            "service_provider",
+                            "debt_servicer",
+                            "other"
+                        ]
+                    },
+                    "vendor_category": {
+                        "type": "enum",
+                        "enum_name": "vendor_category",
+                        "values": [
+                            "trailer_parts",
+                            "shop_supplies_tools_equipment",
+                            "bank_asset_holder",
+                            "general_homegoods",
+                            "food_to_go",
+                            "food_groceries",
+                            "gas_station",
+                            "general_retailer",
+                            "shop_rent",
+                            "utility_company",
+                            "loan_holder",
+                            "credit_card_issuer",
+                            "government"
+                        ]
+                    },
+                    "account_number": "text",
+                    "vendor_contact": "text",
+                    "vendor_phone": "text",
+                    "vendor_website": "text",
+                    "vendor_username": "text",
+                    "vendor_password": "text",
+                    "vendor_email": "text",
+                    "vendor_address": "text",
+                    "vendor_hours": "text",
+                    "additional_contacts": "text",
+                    "created_at": "timestamp with time zone",
+                    "updated_at": "timestamp with time zone"
+                },
+                "primary_key": "vendor_id",
+                "foreign_keys": []
+            }
+        ]
+    }
+]
