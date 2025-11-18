@@ -5,7 +5,7 @@ Complete PostgreSQL database implementation for a 2-person trailer service shop.
 ## 🚀 Quick Start for AI Assistants
 
 **Before working on this project, read:**
-1. **Full Documentation**: https://YOUR-USERNAME.github.io/trailer-shop-db/
+1. **Full Documentation**: [https://trailer-shop-db.vercel.app/](https://trailer-shop-db.vercel.app/)
 2. **Database Schema**: [schema.json](schema.json)
 3. **Current Functions**: [docs/sql/functions.sql](docs/sql/functions.sql)
 
